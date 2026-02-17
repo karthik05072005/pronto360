@@ -1,75 +1,106 @@
 import { useState } from "react";
-import { Send, CheckCircle, MessageCircle } from "lucide-react";
+import { Send, CheckCircle, MessageCircle, ChevronRight, Info, Sparkles } from "lucide-react";
 
-const servicesByDepartment = {
-  "Business Registration": [
-    "Private Limited Company Registration",
-    "LLP Registration", 
-    "OPC Registration",
-    "Partnership Firm Registration",
-    "Sole Proprietorship",
-    "Startup India Registration"
+const mandatoryLicenses = [
+  {
+    id: "kpme",
+    name: "KPME - Clinical License",
+    logo: "/logos/kpme.png"
+  },
+  {
+    id: "pcb",
+    name: "Karnataka Pollution Control Board",
+    logo: "/logos/pcb.png"
+  },
+  {
+    id: "bmw",
+    name: "Bio Medical Waste Authorization",
+    logo: "/logos/bmw.png"
+  }
+];
+
+const categoryLicenses = {
+  "Medical": [
+    { id: "pcpndt", name: "PC-PNDT Act", logo: "/logos/pcpndt.png" },
+    { id: "mtp", name: "MTP & Sterilization", logo: "/logos/mtp.png" },
+    { id: "art", name: "ART Clinic", logo: "/logos/art.png" },
+    { id: "aerb", name: "AERB - X-Ray License", logo: "/logos/aerb.png" }
   ],
-  "Legal Services": [
-    "Trademark Registration",
-    "Copyright Registration",
-    "Patent Filing",
-    "Legal Notice Drafting",
-    "Contract Drafting",
-    "Legal Consultation"
+  "Dental": [
+    { id: "dcd", name: "Drugs Control Department", logo: "/logos/dcd.png" }
   ],
-  "Tax & Compliance": [
-    "GST Registration",
-    "GST Filing",
-    "Income Tax Filing",
-    "TDS Filing",
-    "ROC Filing",
-    "Annual Compliance"
+  "Lab Technician": [
+    { id: "lab-tech", name: "Laboratory Registration", logo: "/logos/ayush.png" }
   ],
-  "Government & Licenses": [
-    "FSSAI License",
-    "MSME Registration",
-    "IEC Code",
-    "Shop Act License",
-    "Labour License",
-    "Import Export License"
+  "Ayurveda": [
+    { id: "ayush", name: "AYUSH Registration", logo: "/logos/ayush.png" }
+  ],
+  "Homeopathy": [
+    { id: "ayush-homo", name: "AYUSH Registration (Homeopathy)", logo: "/logos/ayush.png" }
+  ],
+  "Unani": [
+    { id: "ayush-unani", name: "AYUSH Registration (Unani)", logo: "/logos/ayush.png" }
+  ],
+  "Yoga & Naturopathy": [
+    { id: "ayush-yoga", name: "AYUSH Registration (Yoga)", logo: "/logos/ayush.png" }
+  ],
+  "Integrated System": [
+    { id: "ayush-integrated", name: "AYUSH Registration (Integrated)", logo: "/logos/ayush.png" }
+  ],
+  "Non Medical / Owner": [
+    { id: "gst", name: "GST Registration", logo: "/logos/gst.png" },
+    { id: "fssai", name: "FSSAI Registration", logo: "/logos/fssai.png" },
+    { id: "labour", name: "Shop & Establishment", logo: "/logos/labour.png" },
+    { id: "iso", name: "ISO Certification", logo: "/logos/iso.png" }
   ]
 };
 
 const ServiceInquiry = () => {
-  const [selectedDepartment, setSelectedDepartment] = useState("");
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedLicense, setSelectedLicense] = useState("");
+  const [selectedLicenses, setSelectedLicenses] = useState<string[]>([]);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const availableServices = selectedDepartment ? servicesByDepartment[selectedDepartment as keyof typeof servicesByDepartment] : [];
+  const availableLicenses = selectedCategory ? categoryLicenses[selectedCategory as keyof typeof categoryLicenses] : [];
+  const displayedLicenses = selectedCategory ? [
+    ...mandatoryLicenses,
+    ...(categoryLicenses[selectedCategory as keyof typeof categoryLicenses] || [])
+  ] : [];
 
-  const handleDepartmentChange = (department: string) => {
-    setSelectedDepartment(department);
-    setSelectedServices([]);
-    setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 300);
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setSelectedLicense(""); // Reset license when category changes
+    setSelectedLicenses([]); // Reset all selections
   };
 
-  const handleServiceToggle = (service: string) => {
-    setSelectedServices((prev) => {
-      if (prev.includes(service)) {
-        return prev.filter((s) => s !== service);
+  const handleLicenseToggle = (licenseId: string) => {
+    setSelectedLicenses(prev => {
+      if (prev.includes(licenseId)) {
+        return prev.filter(id => id !== licenseId);
       } else {
-        return [...prev, service];
+        return [...prev, licenseId];
       }
     });
   };
 
+  const handleLicenseChange = (license: string) => {
+    setSelectedLicense(license);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedDepartment || selectedServices.length === 0 || !name || !phone || !email) return;
+    if (!selectedCategory || selectedLicenses.length === 0 || !name || !phone || !email) return;
     
-    const servicesList = selectedServices.map(service => `• ${service}`).join('%0A');
-    const message = `Hi PRONTO360,%0A%0AI need help with the following services:%0A%0A📋 *Department:* ${selectedDepartment}%0A🔧 *Services:*%0A${servicesList}%0A%0A👤 *Contact Details:*%0A• Name: ${name}%0A• Phone: ${phone}%0A• Email: ${email}%0A%0APlease let me know the next steps. Thank you!`;
+    // Get selected license names
+    const selectedLicenseNames = displayedLicenses
+      .filter(license => selectedLicenses.includes(license.id))
+      .map(license => `• ${license.name}`)
+      .join('%0A');
+    
+    const message = `Hi PRONTO360,%0A%0AI need help with the following licenses:%0A%0A📋 *Category:* ${selectedCategory}%0A🔧 *License Type:* ${selectedLicense}%0A%0A� *Required Licenses:*%0A${selectedLicenseNames}%0A%0A� *Contact Details:*%0A• Name: ${name}%0A• Phone: ${phone}%0A• Email: ${email}%0A%0APlease let me know the next steps. Thank you!`;
     
     const whatsappUrl = `https://wa.me/919886709463?text=${message}`;
     window.open(whatsappUrl, '_blank');
@@ -77,8 +108,9 @@ const ServiceInquiry = () => {
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
-      setSelectedDepartment("");
-      setSelectedServices([]);
+      setSelectedCategory("");
+      setSelectedLicense("");
+      setSelectedLicenses([]);
       setName("");
       setPhone("");
       setEmail("");
@@ -86,160 +118,353 @@ const ServiceInquiry = () => {
   };
 
   return (
-    <section className="bg-accent/50 py-16">
-      <div className="container-section">
-        <div className="mx-auto max-w-3xl text-center mb-10">
-          <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl">
-            Find the Right <span className="text-gradient">Service</span> for You
+    <section className="relative bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20 overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 via-transparent to-purple-50/20"></div>
+      
+      <div className="container-section relative z-10">
+        {/* Enhanced header */}
+        <div className="mx-auto max-w-4xl text-center mb-12">
+          <div className="flex items-center justify-center mb-4">
+            <div className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full">
+              <Sparkles className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+            Find Your Perfect <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">License Solution</span>
           </h2>
-          <p className="mt-3 text-muted-foreground">
-            Select your department and choose a service to get started with a free consultation.
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            Navigate the licensing journey with confidence. Our expert team guides you through every step of the process.
           </p>
+          
+          {/* Stats badges */}
+          <div className="flex flex-wrap justify-center gap-4 mt-8">
+            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-gray-200">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span className="text-sm font-medium text-gray-700">500+ Licenses Processed</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-gray-200">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span className="text-sm font-medium text-gray-700">98% Success Rate</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-gray-200">
+              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span className="text-sm font-medium text-gray-700">24/7 Support</span>
+            </div>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="mx-auto max-w-4xl rounded-2xl border border-border bg-background p-6 shadow-lg sm:p-8">
+        <form onSubmit={handleSubmit} className="mx-auto max-w-5xl bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
           {submitted ? (
-            <div className="flex flex-col items-center gap-3 py-8 text-center">
-              <CheckCircle className="h-12 w-12 text-secondary" />
-              <h3 className="text-xl font-bold text-foreground">Thank You!</h3>
-              <p className="text-muted-foreground">
-                We've received your inquiry. Our team will contact you shortly.
+            <div className="flex flex-col items-center gap-6 py-16 text-center">
+              <div className="relative">
+                <div className="absolute inset-0 bg-green-100 rounded-full scale-150 animate-ping"></div>
+                <div className="relative p-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full shadow-lg">
+                  <CheckCircle className="h-12 w-12 text-white" />
+                </div>
+              </div>
+              <h3 className="text-3xl font-bold text-gray-900">Thank You! 🎉</h3>
+              <p className="text-lg text-gray-600 max-w-md">
+                Your inquiry has been received successfully. Our licensing experts will contact you within 24 hours.
               </p>
+              <div className="flex gap-3">
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  WhatsApp message sent
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  Team notified
+                </div>
+              </div>
             </div>
           ) : (
-            <div className="space-y-6">
-              <div>
-                <label className="mb-1.5 block text-sm font-semibold text-foreground">
-                  Department <span className="text-destructive">*</span>
-                </label>
-                <select
-                  value={selectedDepartment}
-                  onChange={(e) => handleDepartmentChange(e.target.value)}
-                  className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                  required
-                >
-                  <option value="">--- Select Department ---</option>
-                  {Object.keys(servicesByDepartment).map((dept) => (
-                    <option key={dept} value={dept}>{dept}</option>
-                  ))}
-                </select>
+            <div className="space-y-8">
+              {/* Step indicator */}
+              <div className="flex items-center justify-center">
+                <div className="flex items-center gap-4">
+                  <div className={`flex items-center gap-2 ${selectedCategory ? 'text-blue-600' : 'text-gray-400'}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${selectedCategory ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>1</div>
+                    <span className="font-medium">Category</span>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-gray-300" />
+                  <div className={`flex items-center gap-2 ${selectedLicense ? 'text-blue-600' : 'text-gray-400'}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${selectedLicense ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>2</div>
+                    <span className="font-medium">License Type</span>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-gray-300" />
+                  <div className={`flex items-center gap-2 ${selectedLicenses.length > 0 ? 'text-blue-600' : 'text-gray-400'}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${selectedLicenses.length > 0 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>3</div>
+                    <span className="font-medium">Licenses</span>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-gray-300" />
+                  <div className={`flex items-center gap-2 ${name && phone && email ? 'text-blue-600' : 'text-gray-400'}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${name && phone && email ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>4</div>
+                    <span className="font-medium">Contact</span>
+                  </div>
+                </div>
               </div>
 
-              {selectedDepartment && (
-                <div className="space-y-4 animate-in fade-in duration-300">
-                  <h3 className="text-lg font-semibold text-foreground">Available Licenses / Services</h3>
-                  
-                  {isLoading ? (
-                    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                      {[...Array(6)].map((_, i) => (
-                        <div key={i} className="h-24 rounded-xl bg-muted animate-pulse" />
-                      ))}
+              {/* Enhanced dropdowns */}
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div className="relative">
+                  <label className="mb-2 block text-sm font-semibold text-gray-700 flex items-center gap-2">
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-xs font-bold text-blue-600">1</span>
                     </div>
-                  ) : (
-                    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                      {availableServices.map((service, index) => (
-                        <label
-                          key={service}
-                          className={`
-                            relative flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all duration-200
-                            ${selectedServices.includes(service) 
-                              ? 'bg-blue-50 border-2 border-blue-300 shadow-md' 
-                              : 'bg-gray-50 border border-gray-200 hover:bg-blue-50 hover:shadow-sm'
-                            }
-                          `}
-                          style={{ animation: `fadeIn 0.3s ease-out ${index * 0.05}s both` }}
-                        >
+                    Select Category <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => handleCategoryChange(e.target.value)}
+                    className="w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300"
+                    required
+                  >
+                    <option value="">Choose your category...</option>
+                    <option value="Medical">🏥 Medical</option>
+                    <option value="Dental">🦷 Dental</option>
+                    <option value="Lab Technician">🔬 Lab Technician</option>
+                    <option value="Ayurveda">🌿 Ayurveda</option>
+                    <option value="Homeopathy">🏠 Homeopathy</option>
+                    <option value="Unani">⚕️ Unani</option>
+                    <option value="Yoga & Naturopathy">🧘 Yoga & Naturopathy</option>
+                    <option value="Integrated System">🔄 Integrated System</option>
+                    <option value="Non Medical / Owner">💼 Non Medical / Owner</option>
+                  </select>
+                </div>
+                <div className="relative">
+                  <label className="mb-2 block text-sm font-semibold text-gray-700 flex items-center gap-2">
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-xs font-bold text-blue-600">2</span>
+                    </div>
+                    Select License Type <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={selectedLicense}
+                    onChange={(e) => handleLicenseChange(e.target.value)}
+                    disabled={!selectedCategory}
+                    className="w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed hover:border-gray-300"
+                    required
+                  >
+                    <option value="">
+                      {selectedCategory ? "Select license type..." : "Select category first"}
+                    </option>
+                    {availableLicenses.map((license) => (
+                      <option key={license.id} value={license.name}>
+                        {license.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {selectedCategory && selectedLicense && (
+                <div className="space-y-8 animate-in fade-in duration-500">
+                  {/* Enhanced instruction */}
+                  <div className="text-center bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-100">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <Info className="h-5 w-5 text-blue-600" />
+                      <h3 className="text-lg font-semibold text-gray-900">Available Licenses</h3>
+                    </div>
+                    <p className="text-gray-600">
+                      Based on your <span className="font-semibold text-blue-600">{selectedCategory}</span> selection, 
+                      choose the licenses you need assistance with:
+                    </p>
+                  </div>
+                  
+                  {/* Enhanced license cards grid */}
+                  <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                    {displayedLicenses.map((license, index) => (
+                      <label
+                        key={license.id}
+                        className={`
+                          relative group cursor-pointer transition-all duration-300 transform
+                          ${selectedLicenses.includes(license.id)
+                            ? 'scale-105'
+                            : 'hover:scale-102'
+                          }
+                        `}
+                        style={{ animation: `fadeInUp 0.5s ease-out ${index * 0.1}s both` }}
+                      >
+                        <div className={`
+                          relative flex flex-col items-center p-6 rounded-2xl border-2 transition-all duration-300
+                          ${selectedLicenses.includes(license.id)
+                            ? 'bg-gradient-to-br from-blue-50 to-purple-50 border-blue-400 shadow-xl'
+                            : 'bg-white border-gray-200 hover:border-blue-300 hover:shadow-lg'
+                          }
+                        `}>
+                          {/* Checkbox */}
                           <input
                             type="checkbox"
-                            name="services"
-                            checked={selectedServices.includes(service)}
-                            onChange={() => handleServiceToggle(service)}
-                            className="sr-only"
+                            checked={selectedLicenses.includes(license.id)}
+                            onChange={() => handleLicenseToggle(license.id)}
+                            className="absolute top-4 right-4 w-5 h-5 text-blue-600 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                           />
-                          <div className="flex-1">
-                            <div className="w-4 h-4 rounded border-2 border-gray-300 bg-white flex items-center justify-center">
-                              {selectedServices.includes(service) && (
-                                <div className="w-2 h-2 rounded bg-blue-600" />
-                              )}
-                            </div>
-                            <span className="text-sm font-semibold text-gray-900">{service}</span>
+                          
+                          {/* Logo container */}
+                          <div className={`
+                            w-20 h-20 mb-4 rounded-2xl flex items-center justify-center transition-all duration-300
+                            ${selectedLicenses.includes(license.id)
+                              ? 'bg-gradient-to-br from-blue-100 to-purple-100'
+                              : 'bg-gray-100 group-hover:bg-blue-50'
+                            }
+                          `}>
+                            <img 
+                              src={license.logo} 
+                              alt={license.name}
+                              className="w-14 h-14 object-contain transition-all duration-300"
+                              onError={(e) => {
+                                e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'/%3E%3C/svg%3E";
+                              }}
+                            />
                           </div>
-                        </label>
-                      ))}
+                          
+                          {/* License name */}
+                          <span className="text-sm font-semibold text-center text-gray-900 leading-tight px-2">
+                            {license.name}
+                          </span>
+                          
+                          {/* Selection indicator */}
+                          {selectedLicenses.includes(license.id) && (
+                            <div className="absolute -top-2 -right-2">
+                              <div className="bg-green-500 text-white rounded-full p-1">
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                  
+                  {/* Enhanced selection counter */}
+                  <div className="text-center bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+                    <div className="flex items-center justify-center gap-3">
+                      <div className={`w-3 h-3 rounded-full ${selectedLicenses.length > 0 ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                      <span className="text-lg font-semibold text-gray-900">
+                        {selectedLicenses.length} License{selectedLicenses.length !== 1 ? 's' : ''} Selected
+                      </span>
+                      {selectedLicenses.length > 0 && (
+                        <span className="text-sm text-green-600 font-medium">✓ Ready to proceed</span>
+                      )}
                     </div>
-                  )}
+                  </div>
                 </div>
               )}
 
-              {selectedServices.length > 0 && (
-                <div className="text-sm text-muted-foreground mb-4">
-                  Selected Services: {selectedServices.length}
-                </div>
-              )}
-
-              {selectedServices.length > 0 && (
-                <div className="space-y-4 border-t border-border pt-6 animate-in fade-in duration-300">
-                  <p className="text-sm font-medium text-muted-foreground">
-                    Enter your details and we'll get back to you:
-                  </p>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="mb-1.5 block text-sm font-semibold text-foreground">
-                        Full Name <span className="text-destructive">*</span>
+              {selectedCategory && selectedLicense && selectedLicenses.length > 0 && (
+                <div className="space-y-8 border-t border-gray-100 pt-8 animate-in fade-in duration-500">
+                  {/* Enhanced contact form header */}
+                  <div className="text-center">
+                    <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      Almost done! Just your contact details
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Get Your Free Consultation</h3>
+                    <p className="text-gray-600">
+                      Our licensing experts will contact you within 24 hours with a personalized solution
+                    </p>
+                  </div>
+                  
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                        <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-bold text-blue-600">👤</span>
+                        </div>
+                        Full Name <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="Your full name"
-                        className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        placeholder="Enter your full name"
+                        className="w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300"
                         required
                       />
                     </div>
-                    <div>
-                      <label className="mb-1.5 block text-sm font-semibold text-foreground">
-                        Phone Number <span className="text-destructive">*</span>
+                    <div className="space-y-2">
+                      <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                        <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-bold text-blue-600">📱</span>
+                        </div>
+                        Phone Number <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="+91 XXXXX XXXXX"
-                        className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        className="w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300"
                         required
                       />
                     </div>
                   </div>
-                  <div>
-                    <label className="mb-1.5 block text-sm font-semibold text-foreground">
-                      Email Address <span className="text-destructive">*</span>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-bold text-blue-600">✉️</span>
+                      </div>
+                      Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      placeholder="your.email@example.com"
+                      className="w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300"
                       required
                     />
                   </div>
-                  <div className="flex gap-3">
+                  
+                  {/* Enhanced action buttons */}
+                  <div className="flex flex-col sm:flex-row gap-4 pt-4">
                     <button
                       type="submit"
-                      className="flex-1 rounded-lg bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30"
+                      className="group relative flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     >
-                      <Send className="mr-2 h-4 w-4" />
-                      Submit Inquiry
+                      <span className="flex items-center justify-center gap-2">
+                        <Send className="h-5 w-5" />
+                        Submit Request
+                        <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     </button>
                     <a
-                      href="https://wa.me/919886709463?text=Hi%20PRONTO360%2C%20I%20need%20help%20with%20a%20service."
+                      href="https://wa.me/919886709463?text=Hi%20PRONTO360%2C%20I%20need%20help%20with%20a%20license."
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-6 py-3.5 text-sm font-semibold text-foreground shadow-sm transition-all hover:bg-accent"
+                      className="group flex-1 flex items-center justify-center gap-2 bg-white border-2 border-green-500 text-green-600 px-8 py-4 rounded-xl font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     >
-                      <MessageCircle className="h-4 w-4" />
+                      <MessageCircle className="h-5 w-5" />
                       Chat on WhatsApp
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                     </a>
+                  </div>
+                  
+                  {/* Trust indicators */}
+                  <div className="flex flex-wrap justify-center gap-6 pt-4 text-xs text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <svg className="w-3 h-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                      </svg>
+                      Secure & Private
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <svg className="w-3 h-3 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                      </svg>
+                      Quick Response
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <svg className="w-3 h-3 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      Expert Assistance
+                    </div>
                   </div>
                 </div>
               )}

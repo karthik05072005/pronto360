@@ -152,7 +152,7 @@ const ServiceInquiry = () => {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="mx-auto max-w-5xl bg-white rounded-3xl shadow-lg border border-border p-8 md:p-12">
+        <form onSubmit={handleSubmit} className="mx-auto max-w-5xl bg-white rounded-3xl shadow-lg border border-border p-5 sm:p-8 md:p-12">
           {submitted ? (
             <div className="flex flex-col items-center gap-6 py-16 text-center">
               <div className="relative">
@@ -179,34 +179,34 @@ const ServiceInquiry = () => {
           ) : (
             <div className="space-y-8">
               {/* Step indicator */}
-              <div className="flex items-center justify-center">
-                <div className="flex items-center gap-4">
-                  <div className={`flex items-center gap-2 ${selectedCategory ? 'text-primary' : 'text-muted-foreground'}`}>
+              <div className="flex flex-col items-center w-full px-4 sm:px-0">
+                <div className="flex flex-wrap justify-center gap-2 sm:gap-4 w-full max-w-2xl">
+                  <div className={`flex items-center gap-2 min-w-max ${selectedCategory ? 'text-primary' : 'text-muted-foreground'}`}>
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${selectedCategory ? 'bg-primary text-white' : 'bg-gray-200'}`}>1</div>
-                    <span className="font-medium">Category</span>
+                    <span className="font-medium text-sm sm:text-base whitespace-nowrap">Category</span>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                  <div className={`flex items-center gap-2 ${selectedLicense ? 'text-primary' : 'text-muted-foreground'}`}>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground hidden sm:block self-center" />
+                  <div className={`flex items-center gap-2 min-w-max ${selectedLicense ? 'text-primary' : 'text-muted-foreground'}`}>
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${selectedLicense ? 'bg-primary text-white' : 'bg-gray-200'}`}>2</div>
-                    <span className="font-medium">License Type</span>
+                    <span className="font-medium text-sm sm:text-base whitespace-nowrap">License Type</span>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                  <div className={`flex items-center gap-2 ${selectedLicenses.length > 0 ? 'text-primary' : 'text-muted-foreground'}`}>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground hidden sm:block self-center" />
+                  <div className={`flex items-center gap-2 min-w-max ${selectedLicenses.length > 0 ? 'text-primary' : 'text-muted-foreground'}`}>
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${selectedLicenses.length > 0 ? 'bg-primary text-white' : 'bg-gray-200'}`}>3</div>
-                    <span className="font-medium">Licenses</span>
+                    <span className="font-medium text-sm sm:text-base whitespace-nowrap">Licenses</span>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                  <div className={`flex items-center gap-2 ${name && phone && email ? 'text-primary' : 'text-muted-foreground'}`}>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground hidden sm:block self-center" />
+                  <div className={`flex items-center gap-2 min-w-max ${name && phone && email ? 'text-primary' : 'text-muted-foreground'}`}>
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${name && phone && email ? 'bg-primary text-white' : 'bg-gray-200'}`}>4</div>
-                    <span className="font-medium">Contact</span>
+                    <span className="font-medium text-sm sm:text-base whitespace-nowrap">Contact</span>
                   </div>
                 </div>
               </div>
 
               {/* Enhanced dropdowns */}
-              <div className="grid gap-6 sm:grid-cols-2">
+              <div className="grid gap-6 sm:gap-8 sm:grid-cols-2">
                 <div className="relative">
-                  <label className="mb-2 block text-sm font-semibold text-foreground flex items-center gap-2">
+                  <label className="mb-2 block text-sm sm:text-base font-semibold text-foreground flex items-center gap-2">
                     <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center">
                       <span className="text-xs font-bold text-primary">1</span>
                     </div>
@@ -215,7 +215,7 @@ const ServiceInquiry = () => {
                   <select
                     value={selectedCategory}
                     onChange={(e) => handleCategoryChange(e.target.value)}
-                    className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20 hover:border-muted-foreground"
+                    className="w-full h-14 rounded-lg border-2 border-border bg-white px-4 text-base font-medium text-foreground outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:ring focus:ring-offset-0 hover:border-primary/50"
                     required
                   >
                     <option value="">Choose your category...</option>
@@ -231,7 +231,7 @@ const ServiceInquiry = () => {
                   </select>
                 </div>
                 <div className="relative">
-                  <label className="mb-2 block text-sm font-semibold text-foreground flex items-center gap-2">
+                  <label className="mb-2 block text-sm sm:text-base font-semibold text-foreground flex items-center gap-2">
                     <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center">
                       <span className="text-xs font-bold text-primary">2</span>
                     </div>
@@ -241,7 +241,7 @@ const ServiceInquiry = () => {
                     value={selectedLicense}
                     onChange={(e) => handleLicenseChange(e.target.value)}
                     disabled={!selectedCategory}
-                    className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed hover:border-muted-foreground"
+                    className="w-full h-14 rounded-lg border-2 border-border bg-white px-4 text-base font-medium text-foreground outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:ring focus:ring-offset-0 disabled:opacity-50 disabled:cursor-not-allowed hover:border-primary/50"
                     required
                   >
                     <option value="">

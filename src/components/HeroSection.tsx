@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { ArrowRight, CheckCircle, Sparkles, Shield, Clock, Users, Star } from "lucide-react";
 import LeadFormModal from "./LeadFormModal";
+import HeroLicenseSelector from "./HeroLicenseSelector";
 
 const HeroSection = () => {
   const [leadOpen, setLeadOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedLicense, setSelectedLicense] = useState("");
 
   const stats = [
     { value: "5,000+", label: "Businesses Served" },
@@ -15,13 +18,11 @@ const HeroSection = () => {
   return (
     <>
       <section className="relative overflow-hidden bg-white">
-        {/* Clean background - removing gradients and floating elements */}
-
-        <div className="container-section relative py-24 lg:py-32">
-          <div className="grid items-center gap-16 lg:grid-cols-2">
-            {/* Enhanced Left Content */}
-            <div className="space-y-8">
-              <div className="flex items-center gap-2">
+        <div className="container-section relative py-20 lg:py-24">
+          <div className="grid items-center gap-12 lg:gap-16 lg:grid-cols-2">
+            {/* Left Column: Content + License Selector */}
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-2 mb-6">
                 <div className="relative">
                   <div className="absolute inset-0 bg-green-400 rounded-full animate-ping"></div>
                   <div className="relative p-1 bg-green-500 rounded-full">
@@ -31,18 +32,29 @@ const HeroSection = () => {
                 <span className="text-green-700 font-medium">Trusted by 5,000+ Businesses</span>
               </div>
               
-              <div className="space-y-4">
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight text-foreground">
+              <div className="space-y-6 mb-8">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-foreground">
                   Fast. Reliable.
                   <span className="block text-primary">
                     360° Business & Legal Solutions.
                   </span>
                 </h1>
-                <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
+                <p className="text-xl text-muted-foreground leading-relaxed">
                   From company registration to tax compliance — get expert assistance for all your business needs with custom solutions.
                 </p>
               </div>
               
+              {/* License Selection Card */}
+              <div className="mb-8">
+                <HeroLicenseSelector 
+                  selectedCategory={selectedCategory}
+                  selectedLicense={selectedLicense}
+                  onCategoryChange={setSelectedCategory}
+                  onLicenseChange={setSelectedLicense}
+                />
+              </div>
+              
+              {/* Primary CTA */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={() => setLeadOpen(true)}
@@ -59,33 +71,17 @@ const HeroSection = () => {
                   Explore Services
                 </a>
               </div>
-              
-              {/* Trust indicators */}
-              <div className="flex flex-wrap gap-6 pt-4">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Shield className="h-4 w-4 text-primary" />
-                  <span>100% Secure</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Clock className="h-4 w-4 text-primary" />
-                  <span>24/7 Support</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Star className="h-4 w-4 text-primary" />
-                  <span>4.9/5 Rating</span>
-                </div>
-              </div>
             </div>
 
-            {/* Right: Stats Grid */}
-            <div className="grid grid-cols-2 gap-4">
+            {/* Right Column: Stats Grid */}
+            <div className="grid grid-cols-2 gap-5">
               {stats.map((s, i) => (
                 <div
                   key={i}
-                  className="bg-white rounded-xl shadow-sm border border-border/50 hover:shadow-md transition-shadow duration-300 flex flex-col items-center justify-center p-6 text-center"
+                  className="bg-gray-50 rounded-xl border border-border/50 hover:shadow-md transition-shadow duration-300 flex flex-col items-center justify-center p-6 text-center"
                 >
                   <span className="text-3xl font-extrabold text-primary">{s.value}</span>
-                  <span className="mt-1 text-sm text-muted-foreground">{s.label}</span>
+                  <span className="mt-2 text-sm text-muted-foreground font-medium">{s.label}</span>
                 </div>
               ))}
             </div>

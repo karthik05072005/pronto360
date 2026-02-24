@@ -36,10 +36,11 @@ const ServiceDetail = () => {
                     onClick={() => setLeadOpen(true)}
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25"
                   >
-                    Request Consultation <ArrowRight className="h-4 w-4" />
+                    Get Custom Quote <ArrowRight className="h-4 w-4" />
                   </button>
                 </div>
-                <p className="mt-4 text-lg font-bold text-primary">{service.pricing}</p>
+                <p className="mt-4 text-sm text-muted-foreground">Custom pricing based on your requirements</p>
+                <p className="mt-2 text-xs text-muted-foreground">No hidden charges. Transparent consultation.</p>
               </div>
               <div className="card-elevated p-8">
                 <h3 className="mb-4 text-lg font-bold text-foreground">Quick Enquiry</h3>

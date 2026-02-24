@@ -8,7 +8,6 @@ export interface Service {
   benefits: string[];
   documents: string[];
   process: { step: number; title: string; description: string }[];
-  pricing: string;
   faqs: { question: string; answer: string }[];
 }
 
@@ -105,10 +104,9 @@ export const serviceDetails: Record<string, Service> = {
       { step: 4, title: "Filing with MCA", description: "Submit incorporation application to MCA" },
       { step: 5, title: "Incorporation", description: "Receive Certificate of Incorporation" },
     ],
-    pricing: "Starting from ₹6,999 + Government Fees",
     faqs: [
       { question: "How long does it take to register a Pvt Ltd Company?", answer: "Typically 7-10 working days from the date of filing all documents." },
-      { question: "What is the minimum capital required?", answer: "There is no minimum capital requirement. You can start with as low as ₹1." },
+      { question: "What is the minimum capital required?", answer: "There is no minimum capital requirement. You can start with minimal investment." },
       { question: "How many directors are required?", answer: "A minimum of 2 directors are required for a Private Limited Company." },
     ],
   },
@@ -142,7 +140,6 @@ export const serviceDetails: Record<string, Service> = {
       { step: 4, title: "Publication", description: "Trademark published in the Trademark Journal" },
       { step: 5, title: "Registration", description: "Receive Trademark Registration Certificate" },
     ],
-    pricing: "Starting from ₹4,999 + Government Fees",
     faqs: [
       { question: "How long does trademark registration take?", answer: "The entire process takes 12-18 months, but you get TM protection from filing date." },
       { question: "Can I register a trademark for my logo?", answer: "Yes, you can register wordmarks, logos, slogans, and even sounds as trademarks." },
@@ -152,7 +149,7 @@ export const serviceDetails: Record<string, Service> = {
   "gst-registration": {
     id: "gst-registration",
     title: "GST Registration",
-    description: "Get your GST registration done quickly and hassle-free. Mandatory for businesses with turnover above ₹20 lakhs.",
+    description: "Get your GST registration done quickly and hassle-free. Mandatory for businesses with turnover above prescribed limits.",
     category: "Tax & Compliance",
     slug: "gst-registration",
     icon: "Receipt",
@@ -178,9 +175,8 @@ export const serviceDetails: Record<string, Service> = {
       { step: 3, title: "Verification", description: "Application verified by GST officer" },
       { step: 4, title: "GSTIN Issued", description: "Receive your GST Identification Number" },
     ],
-    pricing: "Starting from ₹1,999",
     faqs: [
-      { question: "Is GST registration mandatory?", answer: "Yes, for businesses with annual turnover above ₹20 lakhs (₹10 lakhs for NE states)." },
+      { question: "Is GST registration mandatory?", answer: "Yes, for businesses with annual turnover above prescribed limits by state." },
       { question: "How long does GST registration take?", answer: "Typically 3-7 working days from the date of application." },
       { question: "Can I register for GST voluntarily?", answer: "Yes, any business can voluntarily register for GST regardless of turnover." },
     ],
@@ -215,7 +211,6 @@ export const serviceDetails: Record<string, Service> = {
       { step: 4, title: "Inspection", description: "FSSAI officer may inspect premises" },
       { step: 5, title: "License Issued", description: "Receive your FSSAI license" },
     ],
-    pricing: "Starting from ₹2,999",
     faqs: [
       { question: "Is FSSAI license mandatory?", answer: "Yes, all food businesses in India must have an FSSAI license." },
       { question: "What are the types of FSSAI license?", answer: "Basic Registration, State License, and Central License based on turnover." },
@@ -252,7 +247,7 @@ export function getServiceDetail(slug: string): Service {
       "Expert professional assistance",
       "Quick and hassle-free process",
       "100% compliance guaranteed",
-      "Affordable pricing",
+      "Custom pricing based on your requirements",
       "Dedicated support team",
       "End-to-end assistance",
     ],
@@ -270,7 +265,6 @@ export function getServiceDetail(slug: string): Service {
       { step: 4, title: "Processing", description: "Follow up and track application status" },
       { step: 5, title: "Completion", description: "Receive your certificate/license" },
     ],
-    pricing: "Contact us for pricing",
     faqs: [
       { question: `How long does ${serviceTitle} take?`, answer: "The timeline varies based on the complexity and government processing times. Our experts will provide an accurate estimate during consultation." },
       { question: "What documents are required?", answer: "Basic identity proof, address proof, and business-specific documents. Our team will guide you through the complete checklist." },
@@ -301,7 +295,7 @@ export const testimonials = [
   {
     name: "Sneha Reddy",
     company: "CloudNine Exports",
-    text: "PRONTO360 helped us with GST registration and IEC code. Their pricing is transparent and the service quality is outstanding.",
+    text: "PRONTO360 helped us with GST registration and IEC code. Their expert consultation and service quality is outstanding.",
     rating: 4,
   },
 ];

@@ -49,17 +49,22 @@ const Services = () => {
                   <Link
                     key={svc.slug}
                     to={`/services/${svc.slug}`}
-                    className="card-elevated group p-5 transition-all hover:border-primary/30"
+                    className="card-elevated group p-5 transition-all hover:border-primary/30 flex flex-col h-full"
                   >
-                    <h3 className="mb-2 text-base font-semibold text-foreground group-hover:text-primary">
-                      {svc.title}
-                    </h3>
-                    <p className="mb-3 text-sm text-muted-foreground">
-                      Professional {svc.title.toLowerCase()} services with expert guidance.
-                    </p>
-                    <span className="text-sm font-semibold text-primary">
-                      View Details →
-                    </span>
+                    <div>
+                      <h3 className="mb-2 text-base font-semibold text-foreground group-hover:text-primary">
+                        {svc.title}
+                      </h3>
+                      <p className="mb-3 text-sm text-muted-foreground">
+                        Professional {svc.title.toLowerCase()} services with expert guidance.
+                      </p>
+                    </div>
+                    <div className="mt-auto">
+                      <p className="text-xs text-muted-foreground mb-2">Custom pricing based on your requirements</p>
+                      <span className="text-sm font-semibold text-primary">
+                        View Details →
+                      </span>
+                    </div>
                   </Link>
                 ))}
               </div>

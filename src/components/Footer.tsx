@@ -3,7 +3,7 @@ import { Phone, Mail, MapPin } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="border-t border-border bg-muted">
+    <footer className="border-t border-border bg-foreground text-white">
       <div className="container-section py-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
@@ -12,19 +12,19 @@ const Footer = () => {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <span className="text-xs font-black text-primary-foreground">P</span>
               </div>
-              <span className="text-lg font-extrabold text-foreground">
+              <span className="text-lg font-extrabold text-white">
                 PRONTO<span className="text-primary">360</span>
               </span>
             </div>
-            <p className="mb-4 text-sm text-muted-foreground">
+            <p className="mb-4 text-sm text-gray-300">
               Fast. Reliable. 360° Business & Legal Solutions. Your trusted partner for business registration, legal, tax, and licensing needs.
             </p>
           </div>
 
           {/* Services */}
           <div>
-            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-foreground">Services</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-white">Services</h4>
+            <ul className="space-y-2 text-sm text-gray-300">
               <li><Link to="/services?category=business" className="transition-colors hover:text-primary">Business Registration</Link></li>
               <li><Link to="/services?category=legal" className="transition-colors hover:text-primary">Legal Services</Link></li>
               <li><Link to="/services?category=tax" className="transition-colors hover:text-primary">Tax & Compliance</Link></li>
@@ -34,8 +34,8 @@ const Footer = () => {
 
           {/* Company */}
           <div>
-            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-foreground">Company</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-white">Company</h4>
+            <ul className="space-y-2 text-sm text-gray-300">
               <li><Link to="/contact" className="transition-colors hover:text-primary">Contact Us</Link></li>
               <li><Link to="/services" className="transition-colors hover:text-primary">All Services</Link></li>
             </ul>
@@ -43,8 +43,8 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-foreground">Contact</h4>
-            <ul className="space-y-3 text-sm text-muted-foreground">
+            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-white">Contact</h4>
+            <ul className="space-y-3 text-sm text-gray-300">
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-primary" />
                 +91 98867 09463
@@ -60,7 +60,7 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="mt-12 border-t border-border pt-6 text-center text-sm text-muted-foreground">
+        <div className="mt-12 border-t border-gray-700 pt-6 text-center text-sm text-gray-300">
           © {new Date().getFullYear()} PRONTO360. All rights reserved.
         </div>
       </div>

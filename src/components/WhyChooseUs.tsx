@@ -32,7 +32,7 @@ const WhyChooseUs = () => {
             Why Choose PRONTO360?
           </h2>
           <p className="text-lg text-muted-foreground">
-            We make business compliance simple, fast, and affordable.
+            We make business compliance simple, fast, and reliable.
           </p>
         </div>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">

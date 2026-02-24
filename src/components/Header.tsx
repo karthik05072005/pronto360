@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, ChevronDown, Building2, Scale, FileText, Landmark } from "lucide-react";
+import { Menu, X, ChevronDown, Building2, Scale, FileText, Landmark, Bot } from "lucide-react";
 import { serviceCategories } from "@/data/services";
 import LeadFormModal from "./LeadFormModal";
+import ComplianceAssistant from "./ComplianceAssistant";
 
 const categoryIcons: Record<string, React.ReactNode> = {
   Building2: <Building2 className="h-5 w-5 text-primary" />,
@@ -15,11 +16,12 @@ const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
   const [leadOpen, setLeadOpen] = useState(false);
+  const [complianceOpen, setComplianceOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <header className="sticky top-0 z-50 border-b border-border bg-white">
         <div className="container-section flex h-16 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
@@ -33,7 +35,7 @@ const Header = () => {
 
           {/* Desktop Nav */}
           <nav className="hidden items-center gap-1 lg:flex">
-            <Link to="/" className="rounded-lg px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+            <Link to="/" className="rounded-lg px-4 py-2 text-sm font-medium text-foreground transition-colors hover:text-primary border-b-2 border-transparent hover:border-primary">
               Home
             </Link>
             <div
@@ -41,7 +43,7 @@ const Header = () => {
               onMouseEnter={() => setMegaOpen(true)}
               onMouseLeave={() => setMegaOpen(false)}
             >
-              <button className="flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+              <button className="flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium text-foreground transition-colors hover:text-primary border-b-2 border-transparent hover:border-primary">
                 Services <ChevronDown className={`h-4 w-4 transition-transform ${megaOpen ? "rotate-180" : ""}`} />
               </button>
 
@@ -75,10 +77,10 @@ const Header = () => {
               )}
             </div>
 
-            <Link to="/services" className="rounded-lg px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
-              Pricing
+            <Link to="/services" className="rounded-lg px-4 py-2 text-sm font-medium text-foreground transition-colors hover:text-primary border-b-2 border-transparent hover:border-primary">
+              Service Packages
             </Link>
-            <Link to="/contact" className="rounded-lg px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+            <Link to="/contact" className="rounded-lg px-4 py-2 text-sm font-medium text-foreground transition-colors hover:text-primary border-b-2 border-transparent hover:border-primary">
               Contact
             </Link>
           </nav>
@@ -86,8 +88,15 @@ const Header = () => {
           {/* CTA + Mobile Toggle */}
           <div className="flex items-center gap-3">
             <button
+              onClick={() => setComplianceOpen(true)}
+              className="hidden rounded-lg border-2 border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 ease-in-out mr-3 sm:block"
+            >
+              <Bot className="h-4 w-4 inline mr-2" />
+              Compliance Assistant
+            </button>
+            <button
               onClick={() => setLeadOpen(true)}
-              className="hidden rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-90 sm:block"
+              className="hidden rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-accent sm:block"
             >
               Get Consultation
             </button>
@@ -104,13 +113,13 @@ const Header = () => {
         {mobileOpen && (
           <div className="border-t border-border bg-background lg:hidden">
             <div className="container-section space-y-1 py-4">
-              <Link to="/" onClick={() => setMobileOpen(false)} className="block rounded-lg px-4 py-3 text-sm font-medium text-foreground hover:bg-accent">
+              <Link to="/" onClick={() => setMobileOpen(false)} className="block rounded-lg px-4 py-3 text-sm font-medium text-foreground hover:text-primary">
                 Home
               </Link>
               <div>
                 <button
                   onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                  className="flex w-full items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-foreground hover:bg-accent"
+                  className="flex w-full items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-foreground hover:text-primary"
                 >
                   Services
                   <ChevronDown className={`h-4 w-4 transition-transform ${mobileServicesOpen ? "rotate-180" : ""}`} />
@@ -127,7 +136,7 @@ const Header = () => {
                             <li key={svc.slug}>
                               <Link
                                 to={`/services/${svc.slug}`}
-                                className="block rounded-md px-3 py-2 text-sm text-foreground hover:bg-accent"
+                                className="block rounded-md px-3 py-2 text-sm text-foreground hover:text-primary"
                                 onClick={() => setMobileOpen(false)}
                               >
                                 {svc.title}
@@ -140,16 +149,23 @@ const Header = () => {
                   </div>
                 )}
               </div>
-              <Link to="/services" onClick={() => setMobileOpen(false)} className="block rounded-lg px-4 py-3 text-sm font-medium text-foreground hover:bg-accent">
-                Pricing
+              <Link to="/services" onClick={() => setMobileOpen(false)} className="block rounded-lg px-4 py-3 text-sm font-medium text-foreground hover:text-primary">
+                Service Packages
               </Link>
-              <Link to="/contact" onClick={() => setMobileOpen(false)} className="block rounded-lg px-4 py-3 text-sm font-medium text-foreground hover:bg-accent">
+              <Link to="/contact" onClick={() => setMobileOpen(false)} className="block rounded-lg px-4 py-3 text-sm font-medium text-foreground hover:text-primary">
                 Contact
               </Link>
-              <div className="pt-2">
+              <div className="pt-2 space-y-2">
+                <button
+                  onClick={() => { setComplianceOpen(true); setMobileOpen(false); }}
+                  className="w-full rounded-lg border-2 border-primary px-5 py-3 text-sm font-medium text-primary"
+                >
+                  <Bot className="h-4 w-4 inline mr-2" />
+                  Compliance Assistant
+                </button>
                 <button
                   onClick={() => { setLeadOpen(true); setMobileOpen(false); }}
-                  className="w-full rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
+                  className="w-full rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-accent transition-all"
                 >
                   Get Consultation
                 </button>
@@ -160,6 +176,7 @@ const Header = () => {
       </header>
 
       <LeadFormModal open={leadOpen} onOpenChange={setLeadOpen} />
+      <ComplianceAssistant isOpen={complianceOpen} onClose={() => setComplianceOpen(false)} />
     </>
   );
 };
